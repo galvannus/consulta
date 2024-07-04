@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nombre: Inyeccion
+  descripcion: Para inyecciones instramuscular
+  costo: 9.99
+  estado: 1
+  category: inyecciones
+
+two:
+  nombre: Puntos de sutura
+  descripcion: Suturar heridas
+  costo: 9.99
+  estado: 1
+  category: inyecciones

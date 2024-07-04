@@ -1,0 +1,76 @@
+<%= turbo_frame_tag "modal_report_detail" do %>
+    <div class="modal fade show" style = "display: block;" aria-modal= "true" role= "dialog" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 <%= @appointment.cortesia == 1 ? 'bg-warning rounded' : '' %>" id="staticBackdropLabel">
+                        Consulta <%= @appointment.cortesia == 1 ? ' - Cortesia' : '' %>
+                    </h1>
+                    <button type="button" class="btn-close" aria-label="Close"
+                        data-controller= 'modal-report-detail' data-action = "modal-report-detail#close"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    <div style="height: 11em; overflow: auto;">
+                        <table class="table table-hover" cellSpacing="0" cellPadding="1" border="1">
+                            <thead style="position: -webkit-sticky; position: sticky; top: 0;">
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Cantidad</th>
+                                    <th>Costo</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <% @service_list.each do |service| %>
+                                        <tr>
+                                            <td><%= service.service.nombre %></td>
+                                            <td><%= service.cantidad %></td>
+                                            <td>$<%= service.costo %></td>
+                                            <td></td>
+                                        </tr>
+                                    <% end %>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p style="margin: 0;"><b>Ficha:</b><%= " #{@appointment.clave} #{@appointment.consecutivo}" %></p>
+                            
+                            <p style="margin: 0;"><b>Creado:</b><%= " #{@appointment.created_at&.strftime("%Y-%m-%d %H:%M")}" %></p>
+                            <p style="margin: 0;"><b>Consulta:</b><%= " #{@appointment.started_by_doctor_at&.strftime("%Y-%m-%d %H:%M")}" %></p>
+                            <p style="margin: 0;"><b>Atendido:</b><%= " #{@appointment.finished_by_doctor_at&.strftime("%Y-%m-%d %H:%M")}" %></p>
+                            <p style="margin: 0;"><b>Finalizado:</b><%= " #{@appointment.finished_at&.strftime("%Y-%m-%d %H:%M")}" %></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p style="margin: 0;"><b>Total servicios:</b><%= " $#{@appointment.total_servicios}" %></p>
+                            <p class="<%= @appointment.estado == 0 ? 'bg-secondary bg-gradient rounded text-center text-white'
+                                : @appointment.estado == 1 ? 'bg-info bg-gradient rounded text-center text-white' 
+                                : @appointment.estado == 2 ? 'bg-info-subtle bg-gradient rounded text-center text-white'
+                                : @appointment.estado == 3 ? 'bg-success rounded text-center text-white'
+                                : @appointment.estado == 4 ? 'bg-danger rounded text-center text-white'
+                                : "" %>">
+                                <%= @appointment.estado == 0 ? 'En espera'
+                                : @appointment.estado == 1 ? 'Atendiendo' 
+                                : @appointment.estado == 2 ? 'Atendido'
+                                : @appointment.estado == 3 ? 'Finalizado'
+                                : @appointment.estado == 4 ? 'Cancelado'
+                                : ""
+                                %>
+                            </p>
+                            <p style="margin: 0;"><b>Atendio:</b><%= " #{@appointment.atendido_por}" %></p>
+                            <p style="margin: 0;"><b>Observación:</b><%= " #{@appointment.observacion}" %></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <%= link_to "#", data: { controller: "modal-report-detail", action: "modal-report-detail#close" } do %>
+                        <button type="button" class="btn btn-secondary">Cerrar</button>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+<% end %>

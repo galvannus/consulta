@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+crear_usuario:
+  nombre: crear_usuario
+  descripcion: Para crear usuarios.
+
+modificar_usuario:
+  nombre: modificar_usuario
+  descripcion: Para modificar usuarios.
+
+crear_ficha_cosulta:
+  nombre: crear_ficha_cosulta
+  descripcion: Para crear fichas de consultas.
+
+modificar_ficha_cosulta:
+  nombre: modificar_ficha_cosulta
+  descripcion: Para modificar fichas de consultas.
+
+finalizar_ficha_cosulta:
+  nombre: finalizar_ficha_cosulta
+  descripcion: Para finalizar fichas de consultas.

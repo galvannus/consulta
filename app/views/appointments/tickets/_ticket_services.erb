@@ -1,0 +1,45 @@
+<div class="modal fade show" style = "display: block;" aria-modal= "true" role= "dialog" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!--
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Servicios</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            -->
+            <div class="modal-body">
+                <div class="row text-center">
+                    <p><%= DateTime.now.strftime("%d/%m/%Y %H:%M:%S")%></p>
+                    <div>Servicios</div>
+                    <table class="table table-hover" cellSpacing="0" cellPadding="0" border="0">
+                        <thead style="position: -webkit-sticky; position: sticky; top: 0;">
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% @service_list.each do |service| %>
+                                <tr>
+                                    <td><%= service.service.nombre %></td>
+                                    <td><%= service.cantidad %></td>
+                                </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
+                    
+                </div>
+            </div>
+            <script>
+                window.onload = function() {
+                    window.print();
+                    window.onafterprint = window.close;
+
+                    setTimeout(() => {
+                        window.close();
+                    }, 500);
+                };
+            </script>
+        </div>
+    </div>
+</div>

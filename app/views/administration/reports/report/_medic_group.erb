@@ -1,0 +1,122 @@
+<div style="height: 20em; overflow: auto;">
+    <% @total_consultas = 0 %>
+    <% @total_aplicaciones = 0 %>
+    <% @total_servicios = 0 %>
+    <table class="table table-hover" cellSpacing="0" cellPadding="1" border="1">
+        <thead style="position: -webkit-sticky; position: sticky; top: 0;">
+            <tr>
+                <th>Sucursal</th>
+                <th>Médico</th>
+                <th>Consultas</th>
+                <th>Promedian</th>
+                <th>Aplicaciónes</th>
+                <th>Otros Servicios</th>
+                <th>R.Surtida</th>
+                <th>R.Incompleta</th>
+                <th>R.No Surtida</th>
+                <th>Servicios Médicos</th>
+                <th>Venta Generada</th>
+                <th>Venta Promedio</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <% users.each do |user| %>
+                <% @nombre_sucursal = "" %>
+                <% @nombre_medic = "" %>
+                <% @number_of_sessions = 0 %>
+                <% @total_medical_services = 0 %>
+                <% @total_selled = 0 %>
+                <% @total_consulta = 0 %>
+                <% @total_aplication = 0 %>
+                <% @total_otros_servicios = 0 %>
+                <% @receta_surtido = 0 %>
+                <% @receta_incompleto = 0 %>
+                <% @receta_no_surtido = 0 %>
+                <% @count_average_appointment = 0 %>
+                <% @show_table = false %>
+
+                <% @medical_sessions = user.medical_sessions %>
+                <%-# @medical_sessions.inspect%>
+
+                <% @medical_sessions.each do |session| %>
+                    <% @show_table = false %>
+                    
+                    <% session.users.each do |user| %>
+                        <% if user.user_type.nombre == "sucursal" %>
+                            <% @nombre_sucursal = user.nombre %>
+                        <% elsif user.user_type.nombre == "medico" %>
+                            <% @nombre_medic = user.nombre %>
+                        <% end %>
+
+                        <% if user.id == Current.user.id %>
+                            <% @show_table = true %>
+                        <% end %>
+
+                    <% end %>
+
+                    <% if @show_table %>
+
+                        <% @total_medical_services += session.total_consultas + session.total_otros_servicios %>
+                        <% @total_selled += session.total_vendido %>
+                        
+                        <% @appointments = session.appointments.where("appointments.finished_at IS NOT NULL
+                            AND appointments.receta IS NOT NULL").includes(:service_acquireds)
+                        %>
+
+                        <% @appointments.each do |appointment| %>
+
+                            <% if appointment.promedio == 1%>
+                                <% @count_average_appointment += 1 %>
+                            <% end %>
+
+                            <% appointment.service_acquireds.each do |service| %>
+                                <% if service.service_id == 2 %>
+                                    <% @total_consulta += 1 %>
+                                <% elsif service.service_id == 3 %>
+                                    <% @total_aplication += 1 %>
+                                <% else %>
+                                    <% @total_otros_servicios += 1 %>
+                                <% end %>
+                            <% end %>
+
+                            <% if appointment.receta == "surtido" %>
+                                <% @receta_surtido += 1 %>
+                            <% elsif appointment.receta == "incompleto" %>
+                                <% @receta_incompleto += 1 %>
+                            <% elsif appointment.receta == "no_surtido" %>
+                                <% @receta_no_surtido += 1 %>
+                            <% end %>
+
+                        <% end %>
+                    <% end %>
+
+                <% end %>
+                <% if @show_table %>
+                    <% @total_consultas += @total_consulta %>
+                    <% @total_aplicaciones += @total_aplication %>
+                    <% @total_servicios += @total_otros_servicios %>
+
+                    <tr>
+                        <td><%= @nombre_sucursal %></td>
+                        <td><%= @nombre_medic %></td>
+                        <td><%= @total_consulta %></td>
+                        <td><%= @count_average_appointment %></td>
+                        <td><%= @total_aplication %></td>
+                        <td><%= @total_otros_servicios %></td>
+                        <td><%= @receta_surtido %></td>
+                        <td><%= @receta_incompleto %></td>
+                        <td><%= @receta_no_surtido %></td>
+                        <td>$<%= @total_medical_services %></td>
+                        <td>$<%= @total_selled %></td>
+                        <td>
+                            $<%= 
+                            @count_average_appointment.to_f > 0 && @total_selled.to_f > 0 ? ( @total_selled.to_f/@count_average_appointment.to_f ).round(2) : "0"
+                            %>
+                        </td>
+                    </tr>
+                <% end %>
+            <% end %>
+        </tbody>
+    </table>
+</div>

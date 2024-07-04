@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  permission: crear_ficha_cosulta
+  user_type: medico
+
+two:
+  permission: finalizar_ficha_cosulta
+  user_type: sucursal
+
+three:
+  permission: crear_ficha_cosulta
+  user_type: sucursal
+
+four:
+  permission: modificar_ficha_cosulta
+  user_type: administrador

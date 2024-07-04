@@ -1,0 +1,54 @@
+<%= form_with(model: service) do |form| %>
+  <% if service.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(service.errors.count, "error") %> prohibited this service from being saved:</h2>
+
+      <ul>
+        <% service.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :nombre, style: "display: block" %>
+    <%= form.text_field :nombre %>
+  </div>
+
+  <div>
+    <%= form.label :descripcion, style: "display: block" %>
+    <%= form.text_area :descripcion %>
+  </div>
+
+  <div>
+    <%= form.label :costo, style: "display: block" %>
+    <%= form.text_field :costo %>
+  </div>
+
+  <div>
+    <%= form.label :estado, "Estado del servicio", style: "display: block" %>
+    <%= form.select :estado, [["Activo", 1], ["Inactivo", 0]] %>
+  </div>
+
+  <div>
+    <%= form.label :aumentos, "Permitir aumentos", style: "display: block" %>
+    <%= form.select :aumentos, [["Permitir", 1], ["No permitir", 0]] %>
+  </div>
+
+  <div>
+    <%= form.label :category_id, "Categoría", style: "display: block" %>
+		<%= form.collection_select :category_id,
+			Category.all.order(nombre: :asc),
+			:id, :nombre, {include_blank: true},
+			style: "display: block",
+			id: 'slim-select',
+			data: {controller: 'slim-select'}
+		%>
+	</div>
+  <br>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

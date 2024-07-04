@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nombre_paciente: MyString
+  clave: MyString
+  consecutivo: MyString
+  total_servicios: 9.99
+  total_vendido: 9.99
+  estado: 1
+  session: one
+  user: one
+  finished_at: 2024-03-01 13:50:46
+
+two:
+  nombre_paciente: MyString
+  clave: MyString
+  consecutivo: MyString
+  total_servicios: 9.99
+  total_vendido: 9.99
+  estado: 1
+  session: two
+  user: two
+  finished_at: 2024-03-01 13:50:46

@@ -1,0 +1,46 @@
+<%= turbo_frame_tag "modal_cancel" do %>
+    <div class="modal fade show" style = "display: block;" aria-modal= "true" role= "dialog" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Cancelar</h1>
+                    <%= link_to "#", data: { 
+                            controller: "modal-cancel-appointment", 
+                            action: "modal-cancel-appointment#close", 
+                            'turbo-prefetch': "false" } do %>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <% end %>
+                </div>
+                <div class="modal-body">
+                    <%= form_with url: print_ticket_path, method: :get, id: "form-finish-appointment",
+                        html: { target: "_blank" }, data: {
+                            turbo: "false",
+                            controller: "modal-finish-appointment",
+                            action: "turbo:submit-end->modal-finish-appointment#submitForm"
+                        } do |form| %>
+                        <div class="row">
+                            <%= form.hidden_field :appointment_id, value: params[:appointment_id] %>
+                            <%= form.text_area :cancel_reason, placeholder: 'Motivo de cancelación', required: true, autocomplete: false %>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <%= form.submit 'Cancelar consulta', data: { 
+                                    controller: "modal-finish-appointment", 
+                                    action: "modal-finish-appointment#afterSubmitForm" 
+                                },
+                                class: "btn btn-success"
+                                %>
+                            </div>
+                        </div>
+                    <% end %>
+                </div>
+                <div class="modal-footer">
+                    <%= link_to "#", data: { controller: "modal-cancel-appointment", action: "modal-cancel-appointment#close" } do %>
+                        <button type="button" class="btn btn-secondary">Atrás</button>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+<% end %>

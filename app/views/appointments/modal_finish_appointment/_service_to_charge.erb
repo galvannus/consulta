@@ -1,0 +1,8 @@
+<% servicesList.each do |service| %>
+    <tr>
+        <td><%= service.service.nombre %></td>
+        <td><%= service.cantidad %></td>
+        <td>$<%= service.costo %></td>
+        <td>$<%= service.cantidad * service.costo %></td>
+    </tr>
+<% end %>

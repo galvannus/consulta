@@ -1,0 +1,14 @@
+<%= turbo_stream_from "service_acquireds-medico#{appointment}" %>
+
+<div 
+    data-controller="room_service_acquireds-medico<%= appointment %>" 
+    data-appointment-current-session-id-value="<%= appointment %>"
+    class="row" style="height: 10em; overflow: auto;"><!-- style="width: auto; height: 10em; overflow: auto;" -->
+    <div id="service_acquireds">
+        <% servicesList.each do |service| %>
+            <% if service.service_id != 2 && service.service_id != 3 %>
+                <%= render partial: 'service_acquired', locals: { service: service, appointment: appointment, commit: commit } %>
+            <% end %>
+        <% end %>
+    </div>
+</div>

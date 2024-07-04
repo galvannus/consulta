@@ -1,0 +1,33 @@
+<div id="<%= dom_id service %>">
+  <p>
+    <strong>Nombre:</strong>
+    <%= service.nombre %>
+  </p>
+
+  <p>
+    <strong>Descripcion:</strong>
+    <%= service.descripcion %>
+  </p>
+
+  <p>
+    <strong>Costo:</strong>
+    <%= service.costo %>
+  </p>
+
+  <p>
+    <strong>Estado:</strong>
+    <%= service.estado == 0 ? "Inactivo" : "Activo" %>
+  </p>
+
+  <p>
+    <strong>Aumentos:</strong>
+    <%= service.aumentos == 0 ? "No Permitido" : "Permitido" %>
+  </p>
+
+  <p>
+    <strong>Category:</strong>
+    <%= service.category.nombre %>
+    <%-# service.category_id %>
+  </p>
+
+</div>

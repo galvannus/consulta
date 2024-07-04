@@ -1,0 +1,28 @@
+<div class="modal fade show" style = "display: block;" aria-modal= "true" role= "dialog" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!--
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Servicios</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            -->
+            <div class="modal-body">
+                <div class="row text-center">
+                    <h4>Ficha: <%= "#{params[:clave]} #{params[:consecutivo]}" %></h4>
+                    <p><%= DateTime.now.strftime("%d/%m/%Y %H:%M:%S")%></p>
+                </div>
+            </div>
+            <script>
+                window.onload = function() {
+                    window.print();
+                    window.onafterprint = window.close;
+                    
+                    setTimeout(() => {
+                        window.close();
+                    }, 500);
+                };
+            </script>
+        </div>
+    </div>
+</div>

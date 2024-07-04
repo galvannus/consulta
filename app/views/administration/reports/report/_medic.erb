@@ -1,0 +1,44 @@
+<div>
+    <div class="row">
+        <%= turbo_frame_tag 'reportes' do %>
+            <%= form_with url: reports_path, method: :get, class: "d-flex justify-content-center" do |form| %>
+                <div>
+                    <%= form.label :start_at, 'Inicio', class: "form-label" %>
+                    <%= form.date_field :start_at, value: params[:start_at].present? ? params[:start_at] : DateTime.now,
+                    min: @min_date, max: @max_date %>
+                    <%= form.label :finish_at, 'Final', class: "form-label" %>
+                    <%= form.date_field :finish_at, value: params[:finish_at].present? ? params[:finish_at] : DateTime.now,
+                    min: @min_date, max: @max_date %>
+                    <%= form.hidden_field :user_id, value: Current.user.id %>
+                    <%= form.hidden_field :report_type, value: "medic" %>
+                    <%= form.label :sucursal_id, 'Sucursal', class: "form-label" %>
+                    <%= form.collection_select :sucursal_id,
+                        @sucursal,
+                        :id, :nombre, { include_blank: "Todas", selected: params[:sucursal_id] }
+                    %>
+                    <%= form.label :reporte, 'Tipo de Reporte:', class: "form-label" %>
+                    <%= form.select :reporte,
+                        [["Agrupado","agrupado"],["Detallado","detallado"]],
+                        {selected: params[:reporte],include_blank: false}, 
+                        title: "reporte"
+                    %>
+                    <%= form.submit 'Buscar', class: "btn btn-success" %>
+                </div>
+            <% end %>
+            <br>
+
+            <% if params[:reporte] == 'detallado' && !@medical_session.blank? %>
+                <%= render partial: 'administration/reports/report/medic_details',
+                    locals: { medical_session: @medical_session, user_selected: params[:user_id] }
+                %>
+            <% end %>
+            <% if params[:reporte] == 'agrupado' && !@users.blank? %>
+                <%= render partial: 'administration/reports/report/medic_group',
+                    locals: { users: @users }
+                %>
+            <% end %>
+
+        <% end %>
+        
+    </div>
+</div>

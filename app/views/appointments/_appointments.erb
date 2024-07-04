@@ -1,0 +1,36 @@
+<%= turbo_stream_from "appointments#{@session_consulta}" %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3"><strong>Nombre</strong></div>
+        <div class="col-md-2"><strong>Clave</strong></div>
+        <div class="col-md-2"><strong>Estado</strong></div>
+        <div class="col-md-2"><strong>Total</strong></div>
+        <div class="col-md-3"><strong>Acciones</strong></div>
+    </div>
+
+    <div data-controller="room_appointment<%= @session_consulta %>" data-appointment-current-session-id-value="<%= @session_consulta %>">
+        <div id="appointments" class="row" style="height: 20em; overflow: auto;">
+            <% appointments.each do |appointment| %>
+                <%= render partial: 'appointment', locals: { appointment: appointment, session_consulta: @session_consulta } %>
+            <% end %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 d-flex justify-content-end">
+            <% if @can_finish_session %>
+                <%= render partial: 'appointments/buttons_finish_session/btn_reload_finish', 
+                    locals: { session_consulta: @session_consulta }
+                %>
+            <% else %>
+                <%= render partial: 'appointments/buttons_finish_session/btn_normal_finish', 
+                    locals: { session_consulta: @session_consulta }
+                %>
+            <% end %>
+            
+        </div>
+    </div>
+</div>
+
+<%-# turbo_frame_tag "modal_finish" %>
+<%-# turbo_frame_tag "modal_cancel" %>

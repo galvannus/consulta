@@ -1,0 +1,46 @@
+<div class="row text-center">
+    <h4>Folio No. <%= "#{@medical_session.id}" %></h4>
+    <p>Recibí de ADMINISTRADORA PATRIMONIAL DE LA BAHIA S.C.</p>
+    <p>
+        La cantidad de $<%= @total_consultas_ticket %> pesos por concepto
+        del pago de honorarios del día de hoy correspondiente a <%= @conteo_consultas_ticket %> 
+        consultas realizadas, siendo a su costo de $<%= @appointment_cost.costo %> pesos c/u así mismo recibí por otros servicios 
+        medicos la cantidad de $<%= @total_otros_servicios_ticket %> pesos.
+    </p>
+    <b>
+        Bajo protesta de decir la verdad manifiesto que la cantidad entregada corresponde al pago de 
+        honorarios derivados al día de hoy po concepto de comisiones. Expresando que con este pago 
+        no se me adeuda cantidad alguna por ningún concepto.
+    </b>
+    <br>
+    <p>_______________________________</p>
+    <% @medical_session.users.each do |medic| %>
+        <% if medic.user_type.nombre == "medico"%>
+            <% @medic_name = "#{medic.nombre} #{medic.apellido_paterno} #{medic.apellido_materno}" %>
+        <% else %>
+            <% @sucursal_name = medic.nombre %>
+        <% end %>
+    <% end %>
+    <p>Dr. <%= @medic_name %></p>
+    <br>
+    <p>_______________________________</p>
+    <p>Sello del Médico</p>
+    <br>
+    <p>_______________________________</p>
+    <p>Vo.Bo.</p>
+    <br>
+    <p>Consultorio: <%= @sucursal_name %></p>
+    <p><%= DateTime.now.strftime("%d/%m/%Y %H:%M:%S")%></p>
+</div>
+
+<script>
+    window.onload = function() {
+        window.print();
+        window.onafterprint = window.close;
+
+        setTimeout(() => {
+            window.close();
+        }, 500);
+    };
+</script>
+        

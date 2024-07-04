@@ -1,0 +1,124 @@
+<div class="container">
+	<div class='row'>
+		<div class="col-md-3" style="height: 30em; overflow: auto" id="scroll-panel">
+			<input type="hidden" id="appointment_to_scroll" 
+				name="appointment_to_scroll"
+				value="<%= params[:appointment_selected].present? ? "#{params[:appointment_selected]}" : "" %>"
+				data-controller = "scroll-panel"
+			>
+
+			<%= render partial: 'sidebar_appointments',
+			locals: { 
+				appointments: @appointments_createds, appointments_canceled: @appointments_canceleds, sesion_consulta: @session_consulta
+			} %>
+		</div>
+		
+		<div class="col-md-9">
+			<%= turbo_stream_from "medic_panel_#{params[:appointment_selected]}" %>
+			<% if params[:appointment_selected].present? %>
+				<%= turbo_frame_tag "panel_#{params[:appointment_selected]}" do %>
+					<%= form_with url: medico_path, method: :get, data: {
+							turbo_frame: "_top"
+						}, class: "row g-3" do |form| %>
+						<div class="col-md-12 d-flex justify-content-center">
+							<div class="col-md-8">
+								<label for="inputZip" class="form-label">Servicios adquiridos</label>
+								<div class="row">
+									<div class="col-md-12">
+										<div>
+											<%= form.label :consulta, 'Consulta', class: "form-label" %>
+											<%= form.check_box :consulta,
+												disabled: (params[:commit] != '1' ? true : false),
+												checked: (@consulta_creada ? true : false )
+											%>
+
+											<%= form.label :aplicacion, 'Aplicación', class: "form-label" %>
+											<%= form.check_box :aplicacion,
+												disabled: (params[:commit] != '1' ? true : false),
+												checked: (@aplicacion_creada ? true : false )
+											%>
+
+											<%= form.label :cortesia, 'Cortesia', class: "form-label" %>
+											<%= form.check_box :cortesia,
+												disabled: (params[:commit] != '1' ? true : false),
+												checked: (@cortesia_activa ? true : false )
+											%>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="row">
+										<div class="col-md-4">
+											<b>Nombre</b>
+										</div>
+										<div class="col-md-4">
+											<b>Cantidad</b>
+										</div>
+										<div class="col-md-4">
+											<b>Acciones</b>
+										</div>
+									</div>
+									<%= render partial: 'service_list',
+										locals: { 
+											servicesList: @servicesList, appointment: params[:appointment_selected],
+											commit: params[:commit]
+										}
+									%>
+								</div>
+								<br/>
+								<% if params[:commit] === '1' || params[:commit] === 'Iniciar'  %>
+									<%= link_to modal_services_path(appointment_id: params[:appointment_selected]),
+											'data-turbo-prefetch': "false",
+											data: { turbo_frame: "modal_services"} do %>
+										<button type="button" class="btn btn-outline-primary" >
+											Agregar Servicio
+										</button>
+									<% end %>
+								<% end %>
+							</div>
+							<div class="col-md-4">
+								<div class="row">
+									<div class="col-md-12"><h5><%= "Ficha: #{@appointment.clave}#{@appointment.consecutivo}"%></h5></div>
+								</div>
+								<div class="row">
+									<div class="col-md-12"><h5><%= "Paciente: #{@appointment.nombre_paciente}"%></h5></div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-md-12">
+							<% if params[:commit] === '1' || params[:commit] === 'Iniciar' %>
+								<div class="form-floating">
+									<%= form.text_area :observacion, class: "form-control", placeholder: "Observaciones", id: "floatingTextarea", value: @appointment.observacion %>
+									<label for="floatingTextarea">Observaciones</label>
+								</div>
+							<% end %>
+						</div>
+
+						<div class="col-12"></div>
+						<div class="row justify-content-end">
+							<div class="col-md-5"></div>
+							<div class="col-md-5"></div>
+							<div class="col-md-2">
+								<%= form.hidden_field :appointment_selected, value: params[:appointment_selected] %>
+								<%-# @appointment.each do |service| %>
+									<%-# service.estado == 0 ? form.submit('Iniciar', class: 'btn btn-success') : service.estado == 1 ? form.submit('Finalizar', class: 'btn btn-success') : service.estado == 2 ? form.submit('Modificar', class: 'btn btn-success') : "" %>
+								<%-# end %>
+								<%= @appointment.estado == 0 ? form.submit('Iniciar', class: 'btn btn-success')
+									: @appointment.estado == 1 ? form.submit('Finalizar', class: 'btn btn-success')
+									: @appointment.estado == 2 ? form.submit('Modificar', class: 'btn btn-success')
+									: ""
+								%>
+							</div>
+						</div>
+					<% end %>
+					<%= turbo_frame_tag "modal_services" %>
+				<% end %>
+				<!-- modal-html: 5:41 / js: 9:59-->
+				<!-- aparecer: class = show, style = "display: block;" 'aria-modal'= "true" role= "dialog"-->
+				<!-- ocultar: class quitar show, style = "display: none;", quitar role, quitar aria-modal, 'aria-hidden' = "true" -->
+				<%-# render partial: 'service_modal', locals: { servicesList: @servicesList, sesion_consulta: @session_consulta } %>
+			<% end %>
+		</div>
+	</div>
+</div>

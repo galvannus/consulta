@@ -1,0 +1,12 @@
+<%= turbo_stream_from "appointments-medico#{@session_consulta}" %>
+
+<div data-controller="room_appointments-medico<%= @session_consulta %>" data-appointment-current-session-id-value="<%= @session_consulta %>">
+    <div id="appointments">
+        <% appointments.each do |appointment| %>
+            <%= render partial: 'sidebar_appointment', locals: { appointment: appointment, session_consulta: @session_consulta } %>
+        <% end %>
+        <% appointments_canceled.each do |appointment| %>
+            <%= render partial: 'sidebar_appointment', locals: { appointment: appointment, session_consulta: @session_consulta } %>
+        <% end %>
+    </div>
+</div>

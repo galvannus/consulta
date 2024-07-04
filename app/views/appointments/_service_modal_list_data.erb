@@ -1,0 +1,12 @@
+<%-# turbo_frame_tag service do %>
+    <tr>
+        <td><%= service.nombre %></td>
+        <td><%= service.descripcion %></td>
+        <td>$<%= service.costo %></td>
+        <td>
+            <%= link_to modal_services_path(service_id: service.id, appointment_id: params[:appointment_id] ), 'data-turbo-prefetch': "false" do %>
+                <button type="button" class="btn btn-primary"value="<%= service.id %>">+</button>
+            <% end %>
+        </td>
+    </tr>
+<%-# end %>

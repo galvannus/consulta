@@ -1,0 +1,33 @@
+<div class="row justify-content-center">
+    <h5><%= "Médico: #{@current_medic.nombre} #{@current_medic.apellido_paterno} #{@current_medic.apellido_materno}" %></h5>
+</div>
+<div class="row">
+    <div class="col-md-12 d-flex justify-content-center">
+        <%= turbo_frame_tag "new_appointment", target: "_top", 'data-turbo': "false" do %>
+            <%= form_with model: @appointment, id: "appointment_form", html: { target: "_blank" }, class: "form-label",
+                data: {
+                    controller: "reset-form",
+                    action: "turbo:submit-end->reset-form#reset"
+                } do |form| %>
+                <%-# Current.user.inspect %>
+                <div>
+                    <%= form.label :consulta, 'Consulta', class: "form-label" %>
+                    <%= form.check_box :consulta, checked: true %>
+
+                    <%= form.label :aplicacion, 'Aplicación', class: "form-label" %>
+                    <%= form.check_box :aplicacion  %>
+                </div>
+
+                <div>
+                    <%= form.label :nombre_paciente, 'Nombre del paciente', class: "form-label" %>
+                    <%= form.text_field :nombre_paciente, autocomplete: false, required: true, class: "form-control" %>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 d-flex justify-content-end"><%= form.submit 'Registrar', data: { controller: "reset-form", action: "reset-form#reset" }, class: "btn btn-primary" %></div>
+                    
+                </div>
+            <% end %>
+        <% end %>
+    </div>
+</div>

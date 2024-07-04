@@ -1,0 +1,8 @@
+<h1 class='nombre'><%= @permission.nombre %></h1>
+<p class='descripcion'><%= @permission.descripcion %></h1>
+
+<%= link_to 'Editar permiso', edit_permission_path(@permission) %>
+<%= link_to 'Eliminar permiso', permission_path(@permission), data: {
+    turbo_method: :delete,
+    turbo_confirm: '¿Estás seguro?'
+} %>

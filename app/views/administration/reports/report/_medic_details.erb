@@ -1,0 +1,86 @@
+<div style="height: 20em; overflow: auto;">
+    <table class="table table-hover" cellSpacing="0" cellPadding="1" border="1">
+        <thead style="position: -webkit-sticky; position: sticky; top: 0;">
+            <tr>
+                <th>Ficha</th>
+                <th>Paciente</th>
+                <th>Consulta</th>
+                <th>Aplicación</th>
+                <th>Servicio Médico</th>
+                <th>Fecha/Hora</th>
+                <th>Estado</th>
+                <th>Atendido</th>
+                <th>Sucursal</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @total_servicios = 0 %>
+
+            <% if !@medical_session.blank? %>
+                <% @medical_session.each do |session|%>
+
+                    <% session.users.each do |user| %>
+                        <% if user.user_type.nombre == "sucursal" %>
+                            <% @sucursal = user.nombre %>
+                        <% end %>
+                    <% end %>
+                    
+                    <% session.appointments.each do |appointment| %>
+
+                        <% if appointment.estado == 3 %>
+                            <% @total_servicios += appointment.total_servicios %>
+                        <% end %>
+
+                        <% @consulta = "NO" %>
+                        <% @aplication = "NO" %>
+
+                        <% appointment.service_acquireds.each do |service| %>
+                            <% if service.service_id == 2 %>
+                                <% @consulta = "SI" %>
+                            <% elsif service.service_id == 3 %>
+                                <% @aplication = "SI" %>
+                            <% end %>
+                        <% end %>
+
+                        <tr>
+                            <td><%= "#{appointment.clave} #{appointment.consecutivo}" %></td>
+                            <td><%= appointment.nombre_paciente %></td>
+                            <td><%= @consulta %></td>
+                            <td><%= @aplication %></td>
+                            <td>$<%= appointment.total_servicios %></td>
+                            <td><%= appointment.created_at.strftime("%d-%m-%Y %H:%M:%S") %></td>
+                            <td>
+                                <%= link_to modal_report_detail_path(appointment_id: appointment.id),
+                                        'data-turbo-prefetch': "false",style: "text-decoration: none",
+                                        data: { turbo_frame: "modal_report_detail"} do %>
+                                    <p class="<%= appointment.estado == 0 ? 'bg-secondary bg-gradient rounded text-center text-white'
+                                        : appointment.estado == 1 ? 'bg-info bg-gradient rounded text-center text-white' 
+                                        : appointment.estado == 2 ? 'bg-info-subtle bg-gradient rounded text-center text-white'
+                                        : appointment.estado == 3 ? 'bg-success rounded text-center text-white'
+                                        : appointment.estado == 4 ? 'bg-danger rounded text-center text-white'
+                                        : "" %>">
+                                        <%= appointment.estado == 0 ? 'En espera'
+                                        : appointment.estado == 1 ? 'Atendiendo' 
+                                        : appointment.estado == 2 ? 'Atendido'
+                                        : appointment.estado == 3 ? 'Finalizado'
+                                        : appointment.estado == 4 ? 'Cancelado'
+                                        : ""
+                                        %>
+                                    </p>
+                                <% end %>
+                            </td>
+                            <td><%= appointment.atendido_por %></td>
+                            <td><%= @sucursal %></td>
+                        </tr>
+                    <% end %>
+                <% end %>
+            <% end %>
+        </tbody>
+    </table>
+</div>
+<div class="row">
+    <p>
+        Total Servicios: <b>$<%= @total_servicios %></b>
+    </p>
+</div>
+<%= turbo_frame_tag "modal_report_detail" %>

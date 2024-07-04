@@ -1,0 +1,38 @@
+<div id="modal-personalized-cancel<%= appointment.id%>" class="modal-personalized">
+  <div class="modal-content-personalized">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5">Servicios</h1>
+        </div>
+        
+        <% @servicesList = ServiceAcquired.where(appointment: appointment) %>
+
+        <div class="modal-body">
+            <%= form_with url: sucursal_path, method: :get, id: "form-cancel-appointment-#{appointment.id}",
+                data: {
+                    turbo: "false"
+                } do |form| %>
+                <div class="row">
+                    <%= form.hidden_field :appointment_id, value: appointment.id, id: "cancel_appointment_id_#{appointment.id}" %>
+                    <%= form.hidden_field :commit, value: "Cancelar", id: "cancel_commit_id#{appointment.id}" %>
+                    <%= form.text_area :observacion, placeholder: 'Motivo de cancelación', id: "cancel_observacion_id_#{appointment.id}", required: true, autocomplete: false %>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <%= form.submit 'Cancelar', data: { 
+                            controller: "modal-cancel-appointment", 
+                            action: "modal-cancel-appointment#afterSubmitForm" 
+                        }, id: "cancel_#{appointment.id}", class: "btn btn-success"
+                        %>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-controller="modal-cancel-appointment"
+                data-action="modal-cancel-appointment#closeModal" id="cancelCloseButtonBottom_<%= appointment.id%>">
+                Cerrar
+            </button>
+        </div>
+    </div>
+</div>

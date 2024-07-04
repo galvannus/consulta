@@ -1,0 +1,19 @@
+
+<% if params[:commit] == "Finalizar" %>
+    <%= render partial: 'appointments/tickets/ticket_services',
+        locals: { 
+            servicesList: @servicesList, appointment: params[:appointment_selected],
+            commit: params[:commit]
+        }
+    %>
+<% elsif params[:session_consulta].present? %>
+    <%= render partial: 'appointments/tickets/ticket_close_session'
+    %>
+<% else %>
+    <%= render partial: 'appointments/tickets/ticket_appointment',
+        locals: { 
+            servicesList: @servicesList, appointment: params[:appointment_selected],
+            commit: params[:commit]
+        }
+    %>
+<% end %>

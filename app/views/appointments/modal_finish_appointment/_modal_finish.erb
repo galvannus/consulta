@@ -1,0 +1,96 @@
+<div id="modal-personalized<%= appointment.id%>" class="modal-personalized">
+  <div class="modal-content-personalized">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5">Servicios</h1>
+            <!-- 
+            <span class="close-button" id="closeButtonTop_<%= appointment.id%>"
+                data-controller="modal-finish-appointment"
+                data-action="modal-finish-appointment#closeModal">&times;</span>
+            -->
+        </div>
+        
+        <% @servicesList = ServiceAcquired.where(appointment: appointment) %>
+
+        <div class="modal-body">
+            <div style="height: 15em; overflow: auto;">
+                <table class="table table-hover" cellSpacing="0" cellPadding="1" border="1">
+                    <thead style="position: -webkit-sticky; position: sticky; top: 0;">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Cantidad</th>
+                            <th>Costo</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%= render partial: 'appointments/modal_finish_appointment/service_to_charge',
+                            locals: { 
+                                servicesList: @servicesList, sesion_consulta: @session_consulta
+                            }
+                        %>
+                    </tbody>
+                </table>
+            </div>
+
+            <% @total_pay = 0 %>
+            <%-# @other_services = 0 %>
+            <% @print_ticket = false %>
+            <% @servicesList.each do |service| %>
+                <% @total_pay += (service.cantidad * service.costo) %>
+                <% if service.service_id != 2 && service.service_id != 3 %>
+                    <%-# @other_services += 1 %>
+                    <% @print_ticket = true %>
+                <% end %>
+            <% end %>
+            
+            <h5>Total servicios: $<%= @total_pay %></h5>
+
+            <%= form_with url: @print_ticket ? print_ticket_path : sucursal_path, method: :get, id: "form-finish-appointment-#{appointment.id}",
+                html: @print_ticket ? { target: "_blank" } : {}, data: {
+                    turbo: "false",
+                    turbo_frame: "_top"
+                } do |form| %>
+                <div class="txt_field">
+                    <%= form.hidden_field :appointment_id, value: appointment.id, id: "appointment_id#{appointment.id}" %>
+                    <%= form.hidden_field :total_servicios, value: @total_pay, id: "total_servicios_#{appointment.id}" %>
+                    <%= form.hidden_field :commit, value: "Finalizar", id: "commit_id#{appointment.id}" %>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <%= form.number_field :venta_generada, placeholder: 'Venta Generada', 
+                                id: "venta_generada_#{appointment.id}", autocomplete: false,
+                                required: true %>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <%= form.text_field :atendido_por, placeholder: 'Atendido por', 
+                                id: "atendido_por_#{appointment.id}", autocomplete: false,
+                                required: true %>
+                        </div>
+                        <div class="col-md-6">
+                            <%= form.label :receta, 'Receta', class: "form-label" %>
+                            <%= form.select :receta,
+                                [["SURTIDO","surtido"],["INCOMPLETO","incompleto"],["NO SURTIDO","no_surtido"],["N/A","NA"]],
+                                {selected: "surtido",include_blank: false}, id: "receta_#{appointment.id}", 
+                                title: "receta"
+                            %>
+                        </div>
+                    </div>
+                    <%= form.label :obervacion, 'Observación:', class: "form-label" %>
+                    <p><%= appointment.observacion %></p>
+                    <%= form.submit 'Finalizar', data: { 
+                            controller: "modal-finish-appointment", 
+                            action: "modal-finish-appointment#afterSubmitForm" 
+                        }, id: "finish_#{appointment.id}",  class: "btn btn-success" 
+                    %>
+                </div>
+            <% end %>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-controller="modal-finish-appointment"
+                data-action="modal-finish-appointment#closeModal" id="closeButtonBottom_<%= appointment.id%>">
+                Cerrar
+            </button>
+        </div>
+    </div>
+</div>

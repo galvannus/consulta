@@ -1,0 +1,13 @@
+<% if Current.user.user_type.nombre == "administrador" %>
+    <%= render partial: 'administration/reports/report/administrator',
+        locals: { appointments: @appointments, medical_sessions: @medical_session }
+    %>
+<% elsif Current.user.user_type.nombre == "sucursal" %>
+    <%= render partial: 'administration/reports/report/sucursal',
+        locals: { appointments: @appointments, medical_sessions: @medical_session }
+    %>
+<% elsif Current.user.user_type.nombre == "medico" %>
+    <%= render partial: 'administration/reports/report/medic',
+        locals: { appointments: @appointments, medical_sessions: @medical_session }
+    %>
+<% end %>

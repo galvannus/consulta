@@ -1,0 +1,49 @@
+<div id="modal-personalized-cancel<%= appointment.id%>" class="modal-personalized">
+  <div class="modal-content-personalized">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5">Servicios</h1>
+        </div>
+        
+        <% @servicesList = ServiceAcquired.where(appointment: appointment) %>
+
+        <div class="modal-body">
+            <%= form_with url: sucursal_path, method: :get, id: "form-cancel-appointment-#{appointment.id}",
+                data: {
+                    turbo: "false"
+                } do |form| %>
+                <p>Para cancelar esta consulta se requiere autorización del médico.</p>
+                <div class="row">
+                    <div class="col-md-12">
+                        <%= form.text_field :medic_user, placeholder: 'Usuario', id: "cancel_medic_user_#{appointment.id}", autocomplete: false %>
+                        <%= form.password_field :password, placeholder: 'Contraseña', id: "cancel_password_#{appointment.id}" %>
+                        <%= form.hidden_field :commit, value: "Cancelar", id: "cancel_commit_id#{appointment.id}" %>
+                        <%= form.hidden_field :verify_auth, value: "Password", id: "cancel_password_id#{appointment.id}" %>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <%= form.text_area :observacion, placeholder: 'Motivo de cancelación', id: "cancel_observacion_id_#{appointment.id}", autocomplete: false %>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <%= form.hidden_field :appointment_id, value: appointment.id, id: "cancel_appointment_id_#{appointment.id}" %>
+                        <%= form.hidden_field :medical_session_id, value: appointment.id, id: "cancel_medical_session_#{appointment.id}" %>
+                        <%= form.hidden_field :commit, value: "Cancelar", id: "cancel_commit_id#{appointment.id}" %>
+                        <%= form.submit 'Cancelar', data: { 
+                            controller: "modal-cancel-appointment", 
+                            action: "modal-cancel-appointment#beforeSubmitWithPassword" 
+                        }, class: "btn btn-success", id: "cancel_#{appointment.id}"
+                        %>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-controller="modal-cancel-appointment"
+                data-action="modal-cancel-appointment#closeModal" id="cancelCloseButtonBottom_<%= appointment.id%>">
+                Cerrar
+            </button>
+        </div>
+    </div>
+</div>

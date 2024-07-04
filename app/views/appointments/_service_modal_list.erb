@@ -1,0 +1,11 @@
+<%-# turbo_stream_from "service_list#{@session_consulta}" %>
+
+<div data-controller="room_list_service<%= @session_consulta %>" data-service-current-session-id-value="<%= @session_consulta %>">
+    <div id="services<%= @session_consulta %>">
+        <% servicesList.each do |service| %>
+            <% if service.id != 2 && service.id != 3 %>
+                <%= render partial: 'service_modal_list_data', locals: { service: service, session_consulta: @session_consulta } %>
+            <% end %>
+        <% end %>
+    </div>
+</div>

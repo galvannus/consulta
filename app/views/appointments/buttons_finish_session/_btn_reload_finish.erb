@@ -1,0 +1,9 @@
+<%= turbo_frame_tag "appointment_btn_finish#{session_consulta}" do %>
+    <%= link_to print_ticket_path(session_consulta: session_consulta),
+        'data-turbo-prefetch': "false", 'data-turbo-frame': '_top',
+        target: "_blank", onClick: "setTimeout(() => {location.reload();}, 500);" do %>
+        <button type="button" class="btn btn-outline-danger" >
+            Finalizar Sesión
+        </button>
+    <% end %>
+<% end %>

@@ -1,0 +1,18 @@
+<div id="<%= dom_id user_type %>">
+  <p>
+    <strong>Nombre:</strong>
+    <%= user_type.nombre %>
+  </p>
+
+  <p>
+    <strong>Descripcion:</strong>
+    <%= user_type.descripcion %>
+  </p>
+
+  <%= link_to "Editar", edit_user_type_path(user_type) %>
+  <%= link_to 'Eliminar', user_type_path(user_type), data: {
+    turbo_method: :delete,
+    turbo_confirm: '¿Estás seguro?'
+} %>
+
+</div>

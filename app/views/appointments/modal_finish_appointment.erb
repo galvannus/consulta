@@ -1,0 +1,73 @@
+<%= turbo_frame_tag "modal_finish" do %>
+    <div class="modal fade show" style = "display: block;" aria-modal= "true" role= "dialog" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Finalizar</h1>
+                    <%= link_to "#", data: { 
+                            controller: "modal-finish-appointment", 
+                            action: "modal-finish-appointment#close", 
+                            'turbo-prefetch': "false" } do %>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <% end %>
+                </div>
+                <div class="modal-body">
+                    <div style="height: 15em; overflow: auto;">
+                        <table class="table table-hover" cellSpacing="0" cellPadding="1" border="1">
+                            <thead style="position: -webkit-sticky; position: sticky; top: 0;">
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Precio</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%= render partial: 'appointments/modal_finish_appointment/service_to_charge',
+                                    locals: { 
+                                        servicesList: @servicesList, sesion_consulta: @session_consulta
+                                    }
+                                %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <% @total_pay = 0 %>
+                    <% @servicesList.each do |service| %>
+                        <% @total_pay += service.costo %>
+                    <% end %>
+                    
+                    <b>Total servicios: <%= @total_pay %></b>
+
+                    <%= form_with url: print_ticket_path, method: :get, id: "form-finish-appointment",
+                        html: { target: "_blank" }, data: {
+                            turbo: "false",
+                            controller: "modal-finish-appointment",
+                            action: "turbo:submit-end->modal-finish-appointment#submitForm"
+                        } do |form| %>
+                        <div class="txt_field">
+                            <%= form.hidden_field :appointment_id, value: params[:appointment_id] %>
+                            <%= form.hidden_field :total_servicios, value: @total_pay %>
+                            <%= form.text_field :venta_generada, placeholder: 'Venta Generada', required: true, autocomplete: false %>
+                            <%= form.text_field :atendido_por, placeholder: 'Atendido por', required: true, autocomplete: false %>
+                            <%= form.label :receta, 'Receta', required: true, class: "form-label" %>
+                            <%= form.select :receta,
+                                [["SURTIDO","surtido"],["INCOMPLETO","incompleto"],["NO SURTIDO","no_surtido"]],
+                                selected: "surtido"
+                            %>
+                            <%= form.submit 'Finalizar', data: { 
+                                    controller: "modal-finish-appointment", 
+                                    action: "modal-finish-appointment#afterSubmitForm" 
+                                },
+                                class: "btn btn-success" %>
+                        </div>
+                    <% end %>
+                </div>
+                <div class="modal-footer">
+                    <%= link_to "#", data: { controller: "modal-finish-appointment", action: "modal-finish-appointment#close" } do %>
+                        <button type="button" class="btn btn-secondary">Cerrar</button>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+<% end %>

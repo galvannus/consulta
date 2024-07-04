@@ -1,0 +1,25 @@
+<%= turbo_frame_tag service do %>
+    <div class="row">
+        <div class="col-md-4">
+            <p><%= service.service.nombre %></p>
+        </div>
+        <div class="col-md-4">
+            <p><%= service.cantidad %></p>
+        </div>
+        <div class="col-md-4">
+            <% if commit == '1' %>
+                <% if service.service.aumentos != 0 %>
+                    <%= link_to medico_path(service_acquired_id: service.id, accion: 'plus', appointment_selected: appointment, commit: commit ), 'data-turbo-prefetch': "false" do %>
+                        <i class="bi bi-plus-lg btn btn-primary"></i>
+                    <% end %>
+                    <%= link_to medico_path(service_acquired_id: service.id, accion: 'minus', appointment_selected: appointment, commit: commit ), 'data-turbo-prefetch': "false" do %>
+                        <i class="bi bi-dash-lg btn btn-primary"></i>
+                    <% end %>
+                <% end %>
+                <%= link_to medico_path(service_acquired_id: service.id, accion: 'delete', appointment_selected: appointment, commit: commit ), 'data-turbo-prefetch': "false" do %>
+                    <i class="bi bi-trash3 btn btn-danger"></i>
+                <% end %>
+            <% end %>
+        </div>
+    </div>
+<% end %>

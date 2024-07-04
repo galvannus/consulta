@@ -1,0 +1,85 @@
+<%= turbo_frame_tag appointment, class: "row shadow-sm" do %>
+    <div class="col-md-3">
+        <p class="m-0 d-inline"><%= appointment.nombre_paciente %></p>
+    </div>
+    <div class="col-md-2">
+        <%= "#{appointment.clave} #{appointment.consecutivo}" %>
+    </div>
+    <div class="col-md-2 
+        ">
+        <p class="<%= appointment.estado == 0 ? 'bg-secondary bg-gradient rounded text-center text-white'
+        : appointment.estado == 1 ? 'bg-info bg-gradient rounded text-center text-white' 
+        : appointment.estado == 2 ? 'bg-success bg-gradient rounded text-center text-white'
+        : appointment.estado == 3 ? 'bg-info-subtle bg-gradient rounded text-center text-white'
+        : appointment.estado == 4 ? 'bg-danger bg-gradient rounded text-center text-white'
+        : "" %>" >
+        <%= appointment.estado == 0 ? 'En espera'
+        : appointment.estado == 1 ? 'Atendiendo' 
+        : appointment.estado == 2 ? 'Atendido'
+        : appointment.estado == 3 ? 'Finalizado'
+        : appointment.estado == 4 ? 'Cancelado'
+        : "" %>
+        </p>
+    </div>
+    <div class="col-md-2">
+        <p><%= "$#{appointment.total_servicios}" %></p>
+    </div>
+    <div class="col-md-3">
+        <% if appointment.estado == 0 || appointment.estado == 2 %>
+            <!-- 
+            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdropCancel<%= appointment.id%>">
+                Cancelar
+            </button>
+            -->
+            <button type="button" class="btn btn-outline-secondary" id="CancelButton_<%= appointment.id %>" 
+                data-controller="modal-cancel-appointment"
+                data-action="modal-cancel-appointment#openModal">
+                Cancelar
+            </button>
+        <% end %>
+
+        <% if appointment.estado == 2 %>
+            <!-- 
+            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop<%= appointment.id%>">
+                Finalizar
+            </button>
+            -->
+            <button type="button" class="btn btn-outline-success" id="finishButton_<%= appointment.id %>" 
+                data-controller="modal-finish-appointment"
+                data-action="modal-finish-appointment#openModal">
+                Finalizar
+            </button>
+        <% end %>
+        
+        <%-# link_to finish_appointment_path(appointment_id: appointment.id), 'data-turbo-prefetch': "false", data: { turbo_frame: "modal_finish"} do %>
+            <!--
+            <button type="button" class="btn btn-outline-success" >
+                Finalizar
+            </button>
+            -->
+        <%-# end %>
+        <%-# link_to cancel_appointment_path(), 'data-turbo-prefetch': "false", data: { turbo_frame: "modal_cancel"} do %>
+            <!--
+            <button type="button" class="btn btn-outline-secondary" >
+                Cancelar
+            </button>
+            -->
+        <%-# end %>
+    </div>
+    <% if appointment.estado == 2 %>
+    <%= render partial: 'appointments/modal_finish_appointment/modal_finish', 
+            locals: { appointment: appointment, sesion_consulta: @session_consulta }
+    %>
+    <% end %>
+
+    <% if appointment.estado == 0 %>
+    <%= render partial: 'appointments/modal_cancel_appointment/modal_normal_cancel', 
+            locals: { appointment: appointment }
+    %>
+    <% elsif appointment.estado == 2 %>
+    <%= render partial: 'appointments/modal_cancel_appointment/modal_with_authentication', 
+            locals: { appointment: appointment, sesion_consulta: @session_consulta }
+    %>
+    <% end %>
+    
+<% end %>

@@ -1,0 +1,41 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+paco:
+  username: pacoco
+  password_digest: <%= BCrypt::Password.create('123123', cost: 5) %>
+  email: paco@gma.com
+  nombre: Paco
+  apellido_paterno: Chato
+  apellido_materno: Perron
+  estado: 1
+  user_type: medico
+
+pepe:
+  username: pepepe
+  password_digest: <%= BCrypt::Password.create('123123', cost: 5) %>
+  email: pepe@gma.com
+  nombre: Pepe
+  apellido_paterno: Pepito
+  apellido_materno: Grillo
+  estado: 1
+  user_type: medico
+
+grillo:
+  username: grillo
+  password_digest: <%= BCrypt::Password.create('123123', cost: 5) %>
+  email: grillo@gma.com
+  nombre: Grillo
+  apellido_paterno: El pepe
+  apellido_materno: Grillon
+  estado: 1
+  user_type: medico
+
+mago:
+  username: magooz
+  password_digest: <%= BCrypt::Password.create('123123', cost: 5) %>
+  email: magooz@gma.com
+  nombre: Oz
+  apellido_paterno: Mago
+  apellido_materno: Poderoso
+  estado: 1
+  user_type: sucursal

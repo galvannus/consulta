@@ -1,0 +1,19 @@
+<%= form_with url: medical_sessions_path do |form| %>
+	<%-# Current.user.inspect %>
+    <div>
+		<%-#TODO: Add validation: Search only doctor and doctors without session %>
+		<%= form.label :doctor, "Seleccionar Medico" %>
+		<br>
+		<%= form.collection_select :user_id,
+			@medics,
+			:id, :user_full_name, {include_blank: true},
+			style: "display: block",
+			id: 'slim-select',
+			data: {controller: 'slim-select'}
+		%>
+	</div>
+	<br>
+
+    <%= form.submit 'Seleccionar' %>
+    
+<% end %>
